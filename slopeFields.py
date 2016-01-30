@@ -38,9 +38,6 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
     def getRow(x, y, dx):  # returns a row in the the euler's method table
         return [x, dx, y, dydx(x,y)*dx]
 
-    def dydx(x, y):  # calculates the slope at a given point
-        return eval(equation)
-
     # we calculate forward and backward from the initX point
     forwardTable = [getRow(initX, initY, dX)]  # initial list that will hold all of the rows for euler's method going forward
     currCountPoints = 0  # the number of points calculated so far
@@ -51,7 +48,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
         except:
             denom = 1  # if no denom, then the denom is 1
         if (denom < -.1 or denom > .1):  # if denom!~=0: used so as to avoid problems with function definition
-            row = getRow(forwardTable[-1][0]+forwardTable[-1][1], forwardTable[-1][2], forwardTable[-1][1])  # get the next row based off of the last row
+            try:
+                row = getRow(forwardTable[-1][0]+forwardTable[-1][1], forwardTable[-1][2], forwardTable[-1][1])  # get the next row based off of the last row
+            except:
+                break
             row[2] = row[2]+forwardTable[-1][3]  # update the y value in the row by addying the previous dy
             forwardTable.append(row)  # add the row to the table
         if abs(forwardTable[-1][0]) > max([abs(xMin), abs(xMax)]):  # if the x value > 10 or < -10, then we have gone past the axes on the graph so break
@@ -66,7 +66,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
         except:
             denom = 1
         if (denom < -.1 or denom > .1):
-            row = getRow(backwardTable[-1][0]-backwardTable[-1][1], backwardTable[-1][2], backwardTable[-1][1])
+            try:
+                row = getRow(backwardTable[-1][0]-backwardTable[-1][1], backwardTable[-1][2], backwardTable[-1][1])
+            except:
+                break
             row[2] = row[2]-backwardTable[-1][3]
             backwardTable.append(row)
         if abs(backwardTable[-1][0]) > max([abs(xMin), abs(xMax)]):
@@ -82,6 +85,8 @@ def getListOfPointsAndSlopes(step):  # returns a list of points and slopes for p
             try:
                 table.append(getPoint(x,y))
             except ZeroDivisionError:  # if the slope has a divide by zero error, we pass
+                pass
+            except ValueError:
                 pass
     return table
 
