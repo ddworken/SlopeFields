@@ -15,6 +15,7 @@ parser.add_argument('--yMax', dest='yMax', help='Maximum y value. ')
 parser.add_argument('--initX', dest='initX', help='The initial x value. ')
 parser.add_argument('--initY', dest='initY', help='The initial y value. ')
 parser.add_argument('--dX', dest='dX', help='The dX value used in euler\'s method. ')
+parser.add_argument('--line', dest='line', help='If you want to draw a line connecting the dots. Note this may cause problems on functions with asymptotes. ', action='store_true')
 parser.add_argument('equation', help='The equation')
 args = parser.parse_args()
 
@@ -101,7 +102,7 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
         if abs(backwardTable[-1][0]) > max([abs(xMin), abs(xMax)]):
             break
         currCountPoints += 1
-    fullTable = forwardTable+backwardTable  # full table of points is both forward and backward combined
+    fullTable = backwardTable[::-1] + forwardTable  # full table of points is both forward and backward combined
     return [(item[0], item[2]) for item in fullTable]  # we only need the x and y coordinates (not the dx and dy)
 
 def getListOfPointsAndSlopes(step):  # returns a list of points and slopes for plotting on the slope field
@@ -132,7 +133,10 @@ points = getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation)  # 
 xPoints = [x for [x,y] in points]  # break them into lists of x values and y values
 yPoints = [y for [x,y] in points]
 
-ax.plot(xPoints, yPoints, 'ro')  # graph the points from euler's method
+if args.line:
+    ax.plot(xPoints, yPoints, 'r-', linewidth=5)  # graph the points from euler's method
+else:
+    ax.plot(xPoints, yPoints, 'ro', linewidth=5)
 
 plt.title("Slope Field: " + equation.replace('**','^'))
 

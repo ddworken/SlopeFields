@@ -15,6 +15,7 @@ python slopeFields2.py "(3*x^2+1)/(2*y)"
 ```
 usage: slopeFields.py [-h] [--xMin XMIN] [--xMax XMAX] [--yMin YMIN]
                       [--yMax YMAX] [--initX INITX] [--initY INITY] [--dX DX]
+                      [--line]
                       equation
 
 Generate a slope field for a given function.
@@ -31,6 +32,8 @@ optional arguments:
   --initX INITX  The initial x value.
   --initY INITY  The initial y value.
   --dX DX        The dX value used in euler's method.
+  --line         If you want to draw a line connecting the dots. Note this may
+                 cause problems on functions with asymptotes.
 ```
 
 # Dependencies 
