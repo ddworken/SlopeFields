@@ -12,6 +12,27 @@ A slope field generator and grapher written in Python
 python slopeFields2.py "(3*x^2+1)/(2*y)"
 ```
 
+```
+usage: slopeFields.py [-h] [--xMin XMIN] [--xMax XMAX] [--yMin YMIN]
+                      [--yMax YMAX] [--initX INITX] [--initY INITY] [--dX DX]
+                      equation
+
+Generate a slope field for a given function.
+
+positional arguments:
+  equation       The equation
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --xMin XMIN    Minimum x value.
+  --xMax XMAX    Maximum x value.
+  --yMin YMIN    Minimum y value.
+  --yMax YMAX    Maximum y value.
+  --initX INITX  The initial x value.
+  --initY INITY  The initial y value.
+  --dX DX        The dX value used in euler's method.
+```
+
 # Dependencies 
 
 ``` bash

@@ -1,24 +1,50 @@
 from __future__ import print_function  # used for 2,3 compat
 from __future__ import division  # used for 2,3 compat
+import argparse  # used to parse arguments
 import matplotlib.pyplot as plt  # used for graphing
 import numpy as np  # used for fast arrays and np.arange
 import math  # used for math.sqrt
 from math import *  # used for when we eval() math expressions
 from sys import argv  # used to grab the first argument (aka the equation)
 
+parser=argparse.ArgumentParser(description='Generate a slope field for a given function. ')
+parser.add_argument('--xMin', dest='xMin', help='Minimum x value. ')
+parser.add_argument('--xMax', dest='xMax', help='Maximum x value. ')
+parser.add_argument('--yMin', dest='yMin', help='Minimum y value. ')
+parser.add_argument('--yMax', dest='yMax', help='Maximum y value. ')
+parser.add_argument('--initX', dest='initX', help='The initial x value. ')
+parser.add_argument('--initY', dest='initY', help='The initial y value. ')
+parser.add_argument('--dX', dest='dX', help='The dX value used in euler\'s method. ')
+parser.add_argument('equation', help='The equation')
+args = parser.parse_args()
+
 initX = 0  # starting x value
+if args.initX:
+    initX = int(args.initX)
 initY = 1  # starting y value
+if args.initY:
+    initY = int(args.initY)
 dX = .0001  # the value that is used for dX in the euler's method calculation
+if args.dX:
+    dX = int(args.dX)
 numberPoints = 1000000  # the max number of points we calculate when doing euler's method
 step = .5  # the dX and dY between the slopes on the slope field
 lengthSlope = .5  # the length of the slope
 
 xMin = -10  # use to adjust the domain and range of the graph
+if args.xMin:
+    xMin = int(args.xMin)
 xMax = 10
+if args.xMax:
+    xMax = int(args.xMax)
 yMin = -10
+if args.yMin:
+    yMin = int(args.yMin)
 yMax = 10
+if args.yMax:
+    yMax = int(args.yMax)
 
-equation = argv[1].replace('^','**')  # .replace allows the input of ^ and automatic conversion to **
+equation = args.equation.replace('^','**')
 
 def getPoint(x, y):  # gets a point to be plotted on the slope field
     return [x, y, dydx(x,y)]  # returns xVal, yVal, slope
