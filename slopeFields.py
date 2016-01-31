@@ -16,34 +16,35 @@ parser.add_argument('--initX', dest='initX', help='The initial x value. ')
 parser.add_argument('--initY', dest='initY', help='The initial y value. ')
 parser.add_argument('--dX', dest='dX', help='The dX value used in euler\'s method. ')
 parser.add_argument('--line', dest='line', help='If you want to draw a line connecting the dots. Note this may cause problems on functions with asymptotes. ', action='store_true')
+parser.add_argument('--approximate', dest='approximate', help='If you want to approximate f(a). ')
 parser.add_argument('equation', help='The equation')
 args = parser.parse_args()
 
 initX = 0  # starting x value
 if args.initX:
-    initX = int(args.initX)
+    initX = float(args.initX)
 initY = 1  # starting y value
 if args.initY:
-    initY = int(args.initY)
+    initY = float(args.initY)
 dX = .0001  # the value that is used for dX in the euler's method calculation
 if args.dX:
-    dX = int(args.dX)
+    dX = float(args.dX)
 numberPoints = 1000000  # the max number of points we calculate when doing euler's method
 step = .5  # the dX and dY between the slopes on the slope field
 lengthSlope = .5  # the length of the slope
 
 xMin = -10  # use to adjust the domain and range of the graph
 if args.xMin:
-    xMin = int(args.xMin)
+    xMin = float(args.xMin)
 xMax = 10
 if args.xMax:
-    xMax = int(args.xMax)
+    xMax = float(args.xMax)
 yMin = -10
 if args.yMin:
-    yMin = int(args.yMin)
+    yMin = float(args.yMin)
 yMax = 10
 if args.yMax:
-    yMax = int(args.yMax)
+    yMax = float(args.yMax)
 
 equation = args.equation.replace('^','**')
 
@@ -65,6 +66,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
     def getRow(x, y, dx):  # returns a row in the the euler's method table
         return [x, dx, y, dydx(x,y)*dx]
 
+    def floatingEquals(a, b):
+        return abs(a-b) <= dX
+    haveFoundApproxSolution = False
+
     # we calculate forward and backward from the initX point
     forwardTable = [getRow(initX, initY, dX)]  # initial list that will hold all of the rows for euler's method going forward
     currCountPoints = 0  # the number of points calculated so far
@@ -83,6 +88,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
             forwardTable.append(row)  # add the row to the table
         if abs(forwardTable[-1][0]) > max([abs(xMin), abs(xMax)]):  # if the x value > 10 or < -10, then we have gone past the axes on the graph so break
             break
+        if args.approximate and not haveFoundApproxSolution:
+            if floatingEquals(forwardTable[-1][0], float(args.approximate)):
+                print("f("+args.approximate+")="+str(forwardTable[-1][2]))
+                haveFoundApproxSolution = True
         currCountPoints += 1
     currCountPoints = 0  # reset for calculating backwards
     backwardTable = [getRow(initX, initY, dX)]
@@ -101,6 +110,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
             backwardTable.append(row)
         if abs(backwardTable[-1][0]) > max([abs(xMin), abs(xMax)]):
             break
+        if args.approximate and not haveFoundApproxSolution:
+            if floatingEquals(backwardTable[-1][0], float(args.approximate)):
+                print("f("+args.approximate+")="+str(backwardTable[-1][2]))
+                haveFoundApproxSolution = True
         currCountPoints += 1
     fullTable = backwardTable[::-1] + forwardTable  # full table of points is both forward and backward combined
     return [(item[0], item[2]) for item in fullTable]  # we only need the x and y coordinates (not the dx and dy)
