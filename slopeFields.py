@@ -73,6 +73,7 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
     # we calculate forward and backward from the initX point
     forwardTable = [getRow(initX, initY, dX)]  # initial list that will hold all of the rows for euler's method going forward
     currCountPoints = 0  # the number of points calculated so far
+    approximateAnswer = False
     while currCountPoints < numberPoints:  # while we have calculated fewer than numberPoints
         y = forwardTable[-1][2]  # the y value
         try:
@@ -92,6 +93,7 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
             if floatingEquals(forwardTable[-1][0], float(args.approximate)):
                 print("f("+args.approximate+")="+str(forwardTable[-1][2]))
                 haveFoundApproxSolution = True
+                approximateAnswer = forwardTable[-1][2]
         currCountPoints += 1
     currCountPoints = 0  # reset for calculating backwards
     backwardTable = [getRow(initX, initY, dX)]
@@ -114,9 +116,10 @@ def getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation):  # retu
             if floatingEquals(backwardTable[-1][0], float(args.approximate)):
                 print("f("+args.approximate+")="+str(backwardTable[-1][2]))
                 haveFoundApproxSolution = True
+                approximateAnswer = backwardTable[-1][2]
         currCountPoints += 1
     fullTable = backwardTable[::-1] + forwardTable  # full table of points is both forward and backward combined
-    return [(item[0], item[2]) for item in fullTable]  # we only need the x and y coordinates (not the dx and dy)
+    return ((args.approximate, approximateAnswer), [(item[0], item[2]) for item in fullTable])  # we only need the x and y coordinates (not the dx and dy)
 
 def getListOfPointsAndSlopes(step):  # returns a list of points and slopes for plotting on the slope field
     table = [] #holds a list of tuples: (x, y, dy/dx)
@@ -142,15 +145,23 @@ ax.grid()  # enable the grid layout on the graph
 ax.set_xlim([xMin, xMax])  # set the axes limits
 ax.set_ylim([yMin, yMax])
 
-points = getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation)  # get all of the points from euler's method
+out = getPointsFromEulersMethod(initX, initY, dX, numberPoints, equation)  # get all of the points from euler's method
+points = out[1]
 xPoints = [x for [x,y] in points]  # break them into lists of x values and y values
 yPoints = [y for [x,y] in points]
+
+if out[0][1]:
+    ax.plot((out[0][0], out[0][0]), (yMin, yMax), 'b', linewidth=2)
+    ax.plot((xMin, xMax), (out[0][1], out[0][1]), 'b', linewidth=2)
+    plt.title("Slope Field: " + equation.replace('**','^')+"\n f("+str(out[0][0])+")="+str(out[0][1]))
+
 
 if args.line:
     ax.plot(xPoints, yPoints, 'r-', linewidth=5)  # graph the points from euler's method
 else:
     ax.plot(xPoints, yPoints, 'ro', linewidth=5)
 
-plt.title("Slope Field: " + equation.replace('**','^'))
+if not out[0][1]:
+    plt.title("Slope Field: " + equation.replace('**','^'))
 
 plt.show()  # display the graph
