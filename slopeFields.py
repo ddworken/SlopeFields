@@ -151,9 +151,9 @@ xPoints = [x for [x,y] in points]  # break them into lists of x values and y val
 yPoints = [y for [x,y] in points]
 
 if out[0][1]:
-    ax.plot((out[0][0], out[0][0]), (yMin, yMax), 'b', linewidth=2)
-    ax.plot((xMin, xMax), (out[0][1], out[0][1]), 'b', linewidth=2)
-    plt.title("Slope Field: " + equation.replace('**','^')+"\n f("+str(out[0][0])+")="+str(out[0][1]))
+    ax.plot((out[0][0], out[0][0]), (yMin, yMax), 'b', linewidth=2, zorder=100)
+    ax.plot((xMin, xMax), (out[0][1], out[0][1]), 'b', linewidth=2, zorder=100)
+    plt.title("Slope Field: " + equation.replace('**','^')+" and " + "f(" + str(initX) + ")=" + str(initY) + "\nf("+str(out[0][0])+")="+str(out[0][1]))
 
 
 if args.line:
