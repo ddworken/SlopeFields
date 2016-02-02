@@ -10,7 +10,7 @@ setup(
     license='LICENSE.txt',
     description='A Slope Field generator and grapher. ',
     long_description=open('README.rst').read(),
-    scripts=['SlopeFields/SlopeFields.py'],
+    scripts=['SlopeFields/slopeFields'],
     install_requires=[
         "argparse",
         "matplotlib",
