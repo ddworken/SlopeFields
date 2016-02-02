@@ -3,8 +3,8 @@ SlopeFields
 
 A slope field generator and grapher written in Python
 
-.. figure:: https://cloud.githubusercontent.com/assets/5304541/12706974/7736c270-c85b-11e5-830b-7acaf35b4331.png
-   :alt: figure\_5
+.. figure:: https://cloud.githubusercontent.com/assets/5304541/12723227/8e34b272-c8d6-11e5-87ff-c39c22260561.png
+   :alt: Example
 
 For more example images, see `examples.md <https://github.com/ddworken/SlopeFields/blob/master/examples.md>`_
 . 
