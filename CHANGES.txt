@@ -1,1 +1,2 @@
 v0.1.0, 02/01/15 -- Initial release.
+v0.1.1, 02/02/15 -- Renamed to slopeFields from slopeFields.py
