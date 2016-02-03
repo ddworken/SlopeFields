@@ -8,6 +8,8 @@ import math  # used for math.sqrt
 from math import *  # used for when we eval() math expressions
 from sys import argv  # used to grab the first argument (aka the equation)
 
+np.seterr(all='ignore')  # disable numpy warnings
+
 parser=argparse.ArgumentParser(description='Generate a slope field for a given function. ')
 parser.add_argument('--xMin', dest='xMin', help='Minimum x value. ')
 parser.add_argument('--xMax', dest='xMax', help='Maximum x value. ')
@@ -18,6 +20,7 @@ parser.add_argument('--initY', dest='initY', help='The initial y value. ')
 parser.add_argument('--dX', dest='dX', help='The dX value used in euler\'s method. ')
 parser.add_argument('--line', dest='line', help='If you want to draw a line connecting the dots. Note this may cause problems on functions with asymptotes. ', action='store_true')
 parser.add_argument('--approximate', dest='approximate', help='If you want to approximate f(a). ')
+parser.add_argument('--output', dest='output', help='The location where you would like to save the output image')
 parser.add_argument('equation', help='The equation')
 args = parser.parse_args()
 
@@ -164,5 +167,8 @@ else:
 
 if not out[0][1]:
     plt.title("Slope Field: " + equation.replace('**','^'))
+
+if args.output:
+    plt.savefig(args.output)
 
 plt.show()  # display the graph
